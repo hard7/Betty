@@ -3,10 +3,14 @@ package ru.h7.betty.bettymodule;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -26,22 +30,51 @@ public class MainActivity extends Activity {
     }
 
     public void carrotButtonPressed(View view) {
-        makeDefaultAlertDialog().show();
+        makeAlertDialogWithImage().show();
     }
 
     private AlertDialog makeDefaultAlertDialog() {
         String msg = "This is carrot!";
 //        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-        dialog.setTitle("Hello User! How are you?");
-        dialog.setCancelable(true);
-        dialog.setPositiveButton("Good! I'm Amazing! =))",
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        dialogBuilder.setTitle("Hello User! How are you?");
+        dialogBuilder.setCancelable(true);
+        dialogBuilder.setNeutralButton("Good! I'm Amazing! =))",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-        return dialog.create();
+        return dialogBuilder.create();
+    }
+
+    private void showMessage(String msg) {
+        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private AlertDialog makeAlertDialogWithImage() {
+        ImageView image = new ImageView(this);
+        image.setImageResource(R.mipmap.good);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+        dialogBuilder.setTitle("Hello User! How are you?");
+        dialogBuilder.setCancelable(true);
+        dialogBuilder.setPositiveButton(" ",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        final AlertDialog dialog = dialogBuilder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setBackgroundResource(R.mipmap.good);
+            }
+        });
+
+        return dialog;
     }
 
     @Override
