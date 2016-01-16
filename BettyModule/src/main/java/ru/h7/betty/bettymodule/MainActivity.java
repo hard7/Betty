@@ -61,7 +61,15 @@ public class MainActivity extends Activity {
         dialogBuilder.setPositiveButton(" ",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        showMessage("Ok");
                         dialog.dismiss();
+                    }
+                });
+        dialogBuilder.setNegativeButton(" ",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        showMessage("Cancel");
+                        dialog.cancel();
                     }
                 });
         final AlertDialog dialog = dialogBuilder.create();
@@ -69,8 +77,10 @@ public class MainActivity extends Activity {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setBackgroundResource(R.mipmap.good);
+                Button buttonPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                buttonPositive.setBackgroundResource(R.mipmap.positive);
+                Button buttonNegative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                buttonNegative.setBackgroundResource(R.mipmap.negative);
             }
         });
 
