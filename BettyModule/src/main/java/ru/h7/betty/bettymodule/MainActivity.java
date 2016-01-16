@@ -1,24 +1,24 @@
 package ru.h7.betty.bettymodule;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements h7Dialog.NoticeDialogListener {
+    private DialogFragment foodDialog;
+    private DialogFragment sportDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        foodDialog = new h7Dialog();
+        sportDialog = new h7Dialog();
     }
 
 
@@ -29,13 +29,21 @@ public class MainActivity extends Activity implements h7Dialog.NoticeDialogListe
         return true;
     }
 
-    public void carrotButtonPressed(View view) {
-        (new h7Dialog()).show(getFragmentManager(), "default_tag");
+    public void foodButtonPressed(View view) {
+        foodDialog.show(getFragmentManager(), "food");
+    }
+
+    public void sportButtonPressed(View view) {
+        sportDialog.show(getFragmentManager(), "sport");
     }
 
     @Override
-    public void dialogResponse(h7Dialog.DialogResponseType response) {
-        showMessage("onDialogPositiveClick " + response);
+    public void dialogResponse(DialogFragment fragment, h7Dialog.DialogResponse response) {
+        String msg = "onDialogPositiveClick: " + response + ". ";
+        if(fragment == foodDialog) msg += ("This is food dialog!");
+        else if(fragment == sportDialog) msg += ("This is sport dialog!");
+        showMessage(msg);
+
     }
 
     private void showMessage(String msg) {

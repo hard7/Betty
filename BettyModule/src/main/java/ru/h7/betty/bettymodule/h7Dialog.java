@@ -3,19 +3,31 @@ package ru.h7.betty.bettymodule;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class h7Dialog extends DialogFragment implements DialogInterface.OnClickListener {
     private NoticeDialogListener listener;
+//    private DialogResponseFrom from;
 
-    public enum DialogResponseType {Good, Bad, Neutral, Cancel};
+    public enum DialogResponse {Good, Bad, Neutral, Cancel}
+//    public enum DialogResponseFrom {Food, Sport};
 
     public interface NoticeDialogListener {
-        public void dialogResponse(DialogResponseType response);
+        void dialogResponse(DialogFragment fragment, DialogResponse response);
+    }
+
+    public void showFromFood() {
+//        from = DialogResponseFrom.Food;
+        show(getActivity().getFragmentManager(), "tag0");
+    }
+
+    public void showFromSport() {
+//        from = DialogResponseFrom.Sport;
+        show(getFragmentManager(), "tag");
     }
 
     @Override
@@ -60,10 +72,12 @@ public class h7Dialog extends DialogFragment implements DialogInterface.OnClickL
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
             case android.app.Dialog.BUTTON_POSITIVE:
-                listener.dialogResponse(DialogResponseType.Good);
+                listener.dialogResponse(this, DialogResponse.Good);
                 break;
             case android.app.Dialog.BUTTON_NEGATIVE:
-                listener.dialogResponse(DialogResponseType.Bad);
+                listener.dialogResponse(this, DialogResponse.Bad);
+            case Dialog.BUTTON_NEUTRAL:
+                listener.dialogResponse(this, DialogResponse.Neutral);
         }
     }
 
@@ -76,7 +90,7 @@ public class h7Dialog extends DialogFragment implements DialogInterface.OnClickL
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        listener.dialogResponse(DialogResponseType.Cancel);
+        listener.dialogResponse(this, DialogResponse.Cancel);
     }
 
 

@@ -13,5 +13,5 @@
             android:layout_height="wrap_content"
             android:id="@+id/carrotButton" android:layout_centerVertical="true" android:layout_centerHorizontal="true"
             android:src="@mipmap/carrot_pixel" android:clickable="false" android:adjustViewBounds="false"
-            android:onClick="carrotButtonPressed"/>
+            android:onClick="foodButtonPressed"/>
 </RelativeLayout>
