@@ -10,8 +10,7 @@ import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements h7Dialog.NoticeDialogListener {
-    private DialogFragment foodDialog;
-    private DialogFragment sportDialog;
+    private DialogFragment foodDialog, sportDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +38,10 @@ public class MainActivity extends Activity implements h7Dialog.NoticeDialogListe
 
     @Override
     public void dialogResponse(DialogFragment fragment, h7Dialog.DialogResponse response) {
-        String msg = "onDialogPositiveClick: " + response + ". ";
-        if(fragment == foodDialog) msg += ("This is food dialog!");
-        else if(fragment == sportDialog) msg += ("This is sport dialog!");
+        String msg = "Response: ";
+        if(fragment == foodDialog) msg += ("Food");
+        else if(fragment == sportDialog) msg += ("Sport");
+        msg += " is " + response;
         showMessage(msg);
 
     }

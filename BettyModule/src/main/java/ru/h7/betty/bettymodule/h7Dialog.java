@@ -46,11 +46,12 @@ public class h7Dialog extends DialogFragment implements DialogInterface.OnClickL
     @Override
     public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        dialogBuilder.setTitle("Hello User! How are you?");
+//        dialogBuilder.setTitle("Hello User! How are you?");
         dialogBuilder.setCancelable(true);
 
         dialogBuilder.setPositiveButton(" ", this);
         dialogBuilder.setNegativeButton(" ", this);
+        dialogBuilder.setNeutralButton(" ", this);
         final AlertDialog dialog = dialogBuilder.create();
         setupImages(dialog);
         return dialog;
@@ -60,10 +61,9 @@ public class h7Dialog extends DialogFragment implements DialogInterface.OnClickL
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Button buttonPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                buttonPositive.setBackgroundResource(R.mipmap.positive);
-                Button buttonNegative = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                buttonNegative.setBackgroundResource(R.mipmap.negative);
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundResource(R.mipmap.positive);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundResource(R.mipmap.negative);
+                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setBackgroundResource(R.mipmap.free_256);
             }
         });
     }
