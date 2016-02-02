@@ -17,13 +17,22 @@ import java.util.Locale;
 
 
 class Date {
-    static public String DATE_FORMAT = "dd.MM.yyyy";
+    static public String DATE_FORMAT = "yyyy.MM.dd";
+//    static public String DATE_FORMAT_OUTPUT = "dd.MM.yyyy";
     private Calendar calendar = Calendar.getInstance();
     private DateFormat date_fmt = new SimpleDateFormat(DATE_FORMAT, Locale.US);
 
     @Override
     public final String toString() {
         return date_fmt.format(calendar.getTime());
+    }
+
+    public void next() {
+        shift(1);
+    }
+
+    public void prev() {
+        shift(-1);
     }
 
     public final void set(String dateFmt) {
@@ -35,11 +44,17 @@ class Date {
             System.out.println("Parse Exception: " + e);
         }
     }
+
+    public void shift(int offsetDays) {
+        calendar.add(Calendar.DATE, offsetDays);
+    }
 }
+
 
 public class MainActivity extends Activity implements h7Dialog.NoticeDialogListener {
     private DialogFragment foodDialog, sportDialog;
     private Date date = new Date();
+    private Progress progress = new Progress(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
