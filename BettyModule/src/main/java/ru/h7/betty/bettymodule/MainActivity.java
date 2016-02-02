@@ -6,11 +6,40 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+
+class Date {
+    static public String DATE_FORMAT = "dd.MM.yyyy";
+    private Calendar calendar = Calendar.getInstance();
+    private DateFormat date_fmt = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+
+    @Override
+    public final String toString() {
+        return date_fmt.format(calendar.getTime());
+    }
+
+    public final void set(String dateFmt) {
+        try {
+            java.util.Date date = date_fmt.parse(dateFmt);
+            calendar.setTime(date);
+        }
+        catch (ParseException e) {
+            System.out.println("Parse Exception: " + e);
+        }
+    }
+}
 
 public class MainActivity extends Activity implements h7Dialog.NoticeDialogListener {
     private DialogFragment foodDialog, sportDialog;
+    private Date date = new Date();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +47,10 @@ public class MainActivity extends Activity implements h7Dialog.NoticeDialogListe
         setContentView(R.layout.activity_main);
         foodDialog = new h7Dialog();
         sportDialog = new h7Dialog();
+
+        TextView dateText = (TextView) findViewById(R.id.dateText);
+        date.set("01.02.2016");
+        dateText.setText(date.toString());
     }
 
 
