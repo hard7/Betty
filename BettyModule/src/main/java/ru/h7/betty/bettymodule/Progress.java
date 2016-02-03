@@ -39,23 +39,23 @@ class Progress {
 
 
     public Progress(Activity activity) {
-        sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        String progressStr = sharedPref.getString(PROGRESS_KEY, "");
-        if(!sharedPref.contains(PROGRESS_KEY)) {
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(PROGRESS_KEY, progressStr);
-            editor.apply();
-        }
-        parse(progressStr);
+//        sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+//        String progressStr = sharedPref.getString(PROGRESS_KEY, "");
+//        if(!sharedPref.contains(PROGRESS_KEY)) {
+//            SharedPreferences.Editor editor = sharedPref.edit();
+//            editor.putString(PROGRESS_KEY, progressStr);
+//            editor.apply();
+//        }
+//        parse(progressStr);
 
-        if(progressMap.isEmpty()) {
-            fillRandomData(700);
-            savePreference();
+//        if(progressMap.isEmpty()) {
+//            fillRandomData(700);
+//            savePreference();
 
 //            FileOutputStream out = new FileOutputStream(getExternalStorageDirectory() + "/yahoo.png");
 //            outputStreamWriter.write(data);
 //            outputStreamWriter.close();
-        }
+//        }
     }
 
     private void fillRandomData(int N) {

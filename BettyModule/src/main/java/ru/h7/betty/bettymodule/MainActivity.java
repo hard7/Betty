@@ -64,7 +64,7 @@ public class MainActivity extends Activity implements h7Dialog.NoticeDialogListe
         sportDialog = new h7Dialog();
 
         TextView dateText = (TextView) findViewById(R.id.dateText);
-        date.set("01.02.2016");
+//        date.set("2016.02.01");
         dateText.setText(date.toString());
     }
 
