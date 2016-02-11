@@ -1,15 +1,16 @@
 package ru.h7.betty.bettymodule;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.*;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,20 +76,23 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         progress = new Progress(this);
-//        foodDialog = new h7Dialog();
-//        sportDialog = new h7Dialog();
-//
-//        TextView dateText = (TextView) findViewById(R.id.dateText);
-////        date.set("2016.02.01");
-//        dateText.setText(date.toString());
-//
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), progress);
+
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(mSectionsPagerAdapter);
 //        viewPager.addOnPageChangeListener(new CircularViewPagerHandler(viewPager));
         viewPager.setCurrentItem(viewPager.getAdapter().getCount() - 1);
+
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        String progressStr = sharedPref.getString("PROGRESS_KEY", "");
+        showMessage("PREF: " + progressStr);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        progress.save();
+    }
 
     private void showMessage(String msg) {
         Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
@@ -100,7 +104,6 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -118,11 +121,8 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
     }
 
     static public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
-        Progress progress;
-
-        public SectionsPagerAdapter(FragmentManager fm, Progress progress_) {
+        public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            progress = progress_;
         }
 
         @Override
@@ -140,7 +140,11 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
     public static class PlaceholderFragment extends Fragment implements View.OnClickListener {
         private Date date = new Date();
+        private int colors[] = {Color.parseColor("#cccccc"), Color.RED, Color.GREEN, Color.YELLOW};
+        Progress.DayProgress dayProgress;
         Progress progress;
+
+
 
         private static final String ARG_SECTION_NUMBER = "section_number";
         private int offset = 0;
@@ -161,12 +165,6 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-            ImageButton foodButton = (ImageButton) rootView.findViewById(R.id.foodButton);
-            ImageButton sportButton = (ImageButton) rootView.findViewById(R.id.sportButton);
-            foodButton.setOnClickListener(this);
-            sportButton.setOnClickListener(this);
-
             return rootView;
         }
 
@@ -175,10 +173,37 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             super.onViewCreated(view, savedInstanceState);
             int offset = getArguments().getInt(ARG_SECTION_NUMBER);
             date.shift(-offset);
+
+            dayProgress = progress.getDayProgress(date.toString());
             TextView dateText = (TextView) view.findViewById(R.id.dateText);
             dateText.setText(date.toString());
 
-//            showMessage("PlaceholderFragment.onViewCreated " + date.toString());
+            ImageButton foodButton = (ImageButton) view.findViewById(R.id.foodButton);
+            ImageButton sportButton = (ImageButton) view.findViewById(R.id.sportButton);
+            foodButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageButton button = (ImageButton) v;
+                    dayProgress.food = Progress.State.values()[(dayProgress.food.ordinal() + 1) % 4];
+                    button.setBackgroundColor(colors[dayProgress.food.ordinal()]);
+                }
+            });
+            sportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageButton button = (ImageButton) v;
+                    dayProgress.sport = Progress.State.values()[(dayProgress.sport.ordinal() + 1) % 4];
+                    button.setBackgroundColor(colors[dayProgress.sport.ordinal()]);
+                }
+            });
+
+            foodButton.setBackgroundColor(colors[dayProgress.food.ordinal()]);
+            sportButton.setBackgroundColor(colors[dayProgress.sport.ordinal()]);
+
+//            if(offset > 3) {
+//                foodButton.setEnabled(false);
+//                sportButton.setEnabled(false);
+//            }
         }
 
         private void showMessage(String msg) {

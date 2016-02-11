@@ -6,27 +6,30 @@ import android.content.SharedPreferences;
 
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static android.os.Environment.getExternalStorageDirectory;
 
 class Progress {
-    public enum State {Good, Bad, Planned};
+    public enum State {Undefined, Bad, Good, Planned};
 
     public class DayProgress {
+
         public State food, sport;
         public DayProgress(char foodChar, char sportChar) {
             food = charToState(foodChar);
             sport = charToState(sportChar);
         }
 
+        public DayProgress() {
+            this('U', 'U');
+        }
+
         public State charToState(char stateChar) {
             switch (stateChar) {
-                case 'g': case 'G': return State.Good;
+                case 'u': case 'U': return State.Undefined;
                 case 'b': case 'B': return State.Bad;
+                case 'g': case 'G': return State.Good;
                 case 'p': case 'P': return State.Planned;
                 default: throw new Error();
             }
@@ -35,18 +38,18 @@ class Progress {
 
     static private String PROGRESS_KEY = "PROGRESS_KEY";
     private SharedPreferences sharedPref;
-    private Map<String, DayProgress> progressMap = new HashMap<String, DayProgress>();
+    private Map<String, DayProgress> progressMap = new TreeMap<String, DayProgress>();
 
 
     public Progress(Activity activity) {
         sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-//        String progressStr = sharedPref.getString(PROGRESS_KEY, "");
-//        if(!sharedPref.contains(PROGRESS_KEY)) {
-//            SharedPreferences.Editor editor = sharedPref.edit();
-//            editor.putString(PROGRESS_KEY, progressStr);
-//            editor.apply();
-//        }
-//        parse(progressStr);
+        String progressStr = sharedPref.getString(PROGRESS_KEY, "");
+        if(!sharedPref.contains(PROGRESS_KEY)) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(PROGRESS_KEY, progressStr);
+            editor.apply();
+        }
+        parse(progressStr);
 
 //        if(progressMap.isEmpty()) {
 //            fillRandomData(700);
@@ -60,7 +63,7 @@ class Progress {
 
     private void fillRandomData(int N) {
         final Random random = new Random();
-        String states = "GBP";
+        String states = "UGBP";
         Date date = new Date();
         date.shift(-2 * N);
         while(N > 0) {
@@ -70,6 +73,13 @@ class Progress {
             progressMap.put(date.toString(), p);
             N--;
         }
+    }
+
+    public DayProgress getDayProgress(String dayKey) {
+        if(!progressMap.containsKey(dayKey)) {
+            progressMap.put(dayKey, new DayProgress());
+        }
+        return progressMap.get(dayKey);
     }
 
     @Override
@@ -82,6 +92,10 @@ class Progress {
         return result;
     }
 
+    public void save() {
+        savePreference();
+    }
+
     private void savePreference() {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(PROGRESS_KEY, toString());
@@ -91,6 +105,7 @@ class Progress {
     private void parse(String str) {
         String lines[] = str.split("[\\r?\\n]");
         for(String line : lines) {
+            if(line.isEmpty()) continue;
             String comp[] = line.split("\\s+", 2);
             progressMap.put(comp[0], new DayProgress(comp[1].charAt(0), comp[1].charAt(1)));
         }
