@@ -39,7 +39,7 @@ class Progress {
 
 
     public Progress(Activity activity) {
-//        sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
 //        String progressStr = sharedPref.getString(PROGRESS_KEY, "");
 //        if(!sharedPref.contains(PROGRESS_KEY)) {
 //            SharedPreferences.Editor editor = sharedPref.edit();
