@@ -8,10 +8,19 @@ interface ButtonStateUpdater {
 }
 
 class BackgroundButtonStateUpdater implements ButtonStateUpdater {
-    private int colors[] = {Color.parseColor("#cccccc"), Color.RED, Color.GREEN, Color.YELLOW};
 
     @Override
     public void update(ImageButton imageButton, Progress.State state) {
-        imageButton.setBackgroundColor(colors[state.getEstimate().ordinal()]);
+        imageButton.setBackgroundColor(getColorByEstimate(state.getEstimate()));
+    }
+
+    private int getColorByEstimate(Progress.Estimate estimate) {
+        switch (estimate) {
+            case Undefined: return Color.parseColor("#cccccc");
+            case Bad: return Color.RED;
+            case Good: return Color.GREEN;
+            case Planned: return Color.YELLOW;
+        }
+        return Color.BLACK;
     }
 }
