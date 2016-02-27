@@ -7,23 +7,23 @@ import android.content.SharedPreferences;
 import java.util.*;
 
 class Progress {
-    public enum State_ {
-        Undefined, Bad, Good, Planned;
-
-        private static final State_[] values_ = values();
-        public State_ getNextState() {
-            return values_[(ordinal() + 1) % values_.length];
-        }
+//    public enum State_ {
+//        Undefined, Bad, Good, Planned;
 //
-//        public boolean isFoodState() {
-//
+//        private static final State_[] values_ = values();
+//        public State_ getNextState() {
+//            return values_[(ordinal() + 1) % values_.length];
 //        }
+////
+////        public boolean isFoodState() {
+////
+////        }
+////
+////        public boolean isSportState() {
+////
+////        }
 //
-//        public boolean isSportState() {
-//
-//        }
-
-    }
+//    }
 
     public enum Category { Food, Sport; }
     public enum Estimate { Undefined, Bad, Good, Planned; }
@@ -71,10 +71,10 @@ class Progress {
 
     public class DayProgress {
 
-        public State_ food, sport;
+        public State food, sport;
         public DayProgress(char foodChar, char sportChar) {
-            food = charToState(foodChar);
-            sport = charToState(sportChar);
+            food = new State(Category.Food, State.getEstimateByChar(foodChar));
+            sport = new State(Category.Sport, State.getEstimateByChar(sportChar));
         }
 
         public DayProgress() {
@@ -82,21 +82,11 @@ class Progress {
         }
 
         public void switchToNextFoodState() {
-            food = food.getNextState();
+            food.switchToNextEstimate();
         }
 
         public void switchToNextSportState() {
-            sport = sport.getNextState();
-        }
-
-        public State_ charToState(char stateChar) {
-            switch (stateChar) {
-                case 'u': case 'U': return State_.Undefined;
-                case 'b': case 'B': return State_.Bad;
-                case 'g': case 'G': return State_.Good;
-                case 'p': case 'P': return State_.Planned;
-                default: throw new Error();
-            }
+            sport.switchToNextEstimate();
         }
     }
 
@@ -151,7 +141,7 @@ class Progress {
         String result = "";
         for( Map.Entry<String, DayProgress> entry : progressMap.entrySet() ) {
             DayProgress dp = entry.getValue();
-            result += entry.getKey() + " " + dp.food.name().charAt(0) + dp.sport.name().charAt(0) + "\n";
+            result += entry.getKey() + " " + dp.food.estimateToChar() + dp.sport.estimateToChar() + "\n";
         }
         return result;
     }

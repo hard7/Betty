@@ -55,7 +55,7 @@ class Date {
 }
 
 interface ButtonStateUpdater {
-    void update(ImageButton button, Progress.State_ state);
+    void update(ImageButton button, Progress.State state);
 }
 
 interface ProgressGetter {
@@ -187,7 +187,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                 public void onClick(View v) {
                     dayProgress.switchToNextFoodState();
                     ImageButton button = (ImageButton) v;
-                    button.setBackgroundColor(colors[dayProgress.food.ordinal()]);
+                    button.setBackgroundColor(colors[dayProgress.food.getEstimate().ordinal()]);
                 }
             });
             sportButton.setOnClickListener(new View.OnClickListener() {
@@ -195,12 +195,12 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                 public void onClick(View v) {
                     dayProgress.switchToNextSportState();
                     ImageButton button = (ImageButton) v;
-                    button.setBackgroundColor(colors[dayProgress.sport.ordinal()]);
+                    button.setBackgroundColor(colors[dayProgress.sport.getEstimate().ordinal()]);
                 }
             });
 
-            foodButton.setBackgroundColor(colors[dayProgress.food.ordinal()]);
-            sportButton.setBackgroundColor(colors[dayProgress.sport.ordinal()]);
+            foodButton.setBackgroundColor(colors[dayProgress.food.getEstimate().ordinal()]);
+            sportButton.setBackgroundColor(colors[dayProgress.sport.getEstimate().ordinal()]);
         }
 
         private void showMessage(String msg) {
