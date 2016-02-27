@@ -1,8 +1,6 @@
 package ru.h7.betty.bettymodule;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -54,6 +52,10 @@ class Date {
     public void shift(int offsetDays) {
         calendar.add(Calendar.DATE, offsetDays);
     }
+}
+
+interface ButtonStateUpdater {
+    void update(ImageButton button, Progress.State_ state);
 }
 
 interface ProgressGetter {
@@ -140,7 +142,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class PlaceholderFragment extends Fragment implements View.OnClickListener {
+    public static class PlaceholderFragment extends Fragment {
         private Date date = new Date();
         private int colors[] = {Color.parseColor("#cccccc"), Color.RED, Color.GREEN, Color.YELLOW};
         Progress.DayProgress dayProgress;
@@ -199,31 +201,10 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
             foodButton.setBackgroundColor(colors[dayProgress.food.ordinal()]);
             sportButton.setBackgroundColor(colors[dayProgress.sport.ordinal()]);
-
-//            if(offset > 3) {
-//                foodButton.setEnabled(false);
-//                sportButton.setEnabled(false);
-//            }
         }
 
         private void showMessage(String msg) {
             Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.sportButton:
-                    showMessage("sportButton");
-//                    sportDialog.show(getActivity().getFragmentManager(), "sport");
-                    break;
-                case R.id.foodButton:
-                    showMessage("foodButton");
-//                    foodDialog.show(getActivity().getFragmentManager(), "food");
-                    break;
-                default:
-                    throw new Error();
-            }
         }
 
         @Override

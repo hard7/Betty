@@ -4,25 +4,74 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.util.*;
 
-import static android.os.Environment.getExternalStorageDirectory;
-
 class Progress {
-    public enum State {
+    public enum State_ {
         Undefined, Bad, Good, Planned;
 
-        private static final State[] values_ = values();
-        public State getNextState() {
+        private static final State_[] values_ = values();
+        public State_ getNextState() {
             return values_[(ordinal() + 1) % values_.length];
         }
-    };
+//
+//        public boolean isFoodState() {
+//
+//        }
+//
+//        public boolean isSportState() {
+//
+//        }
+
+    }
+
+    public enum Category { Food, Sport; }
+    public enum Estimate { Undefined, Bad, Good, Planned; }
+    static public class State {
+        private Category category;
+        private Estimate estimate;
+        private static final Estimate[] estimateValues = Estimate.values();
+        private static final Category[] categoryValues = Category.values();
+
+        public State(Category category_, Estimate estimate_) {
+            category = category_;
+            estimate = estimate_;
+        }
+        public State(Category category) {
+            this(category, Estimate.Undefined);
+        }
+
+        public void switchToNextEstimate() {
+            estimate = estimateValues[(estimate.ordinal() + 1) % estimateValues.length];
+        }
+
+        public Estimate getEstimate() {
+            return estimate;
+        }
+
+        public Category getCategory() {
+            return category;
+        }
+
+        public char estimateToChar() {
+            return estimate.name().charAt(0);
+        }
+
+        static public Estimate getEstimateByChar(char c) {
+            switch (c) {
+                case 'u': case 'U': return Estimate.Undefined;
+                case 'b': case 'B': return Estimate.Bad;
+                case 'g': case 'G': return Estimate.Good;
+                case 'p': case 'P': return Estimate.Planned;
+                default: throw new Error();
+            }
+        }
+    }
+
 
     public class DayProgress {
 
-        public State food, sport;
+        public State_ food, sport;
         public DayProgress(char foodChar, char sportChar) {
             food = charToState(foodChar);
             sport = charToState(sportChar);
@@ -40,12 +89,12 @@ class Progress {
             sport = sport.getNextState();
         }
 
-        public State charToState(char stateChar) {
+        public State_ charToState(char stateChar) {
             switch (stateChar) {
-                case 'u': case 'U': return State.Undefined;
-                case 'b': case 'B': return State.Bad;
-                case 'g': case 'G': return State.Good;
-                case 'p': case 'P': return State.Planned;
+                case 'u': case 'U': return State_.Undefined;
+                case 'b': case 'B': return State_.Bad;
+                case 'g': case 'G': return State_.Good;
+                case 'p': case 'P': return State_.Planned;
                 default: throw new Error();
             }
         }
