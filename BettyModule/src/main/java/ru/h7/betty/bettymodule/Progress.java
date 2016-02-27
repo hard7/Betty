@@ -53,10 +53,19 @@ class Progress {
 
     public class DayProgress {
 
-        public State food, sport;
+        private State food, sport;
         public DayProgress(char foodChar, char sportChar) {
             food = new State(Category.Food, State.getEstimateByChar(foodChar));
             sport = new State(Category.Sport, State.getEstimateByChar(sportChar));
+        }
+
+        public State getStateByCategory(Category category) {
+            State result = null;
+            switch(category) {
+            case Food: result = food; break;
+            case Sport: result = sport; break;
+            }
+            return result;
         }
 
         public DayProgress() {

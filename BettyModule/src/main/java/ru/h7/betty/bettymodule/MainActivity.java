@@ -185,8 +185,8 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             ImageButton foodButton = (ImageButton) view.findViewById(R.id.foodButton);
             ImageButton sportButton = (ImageButton) view.findViewById(R.id.sportButton);
 
-            buttonID2State.put(foodButton.getId(), dayProgress.food);
-            buttonID2State.put(sportButton.getId(), dayProgress.sport);
+            buttonID2State.put(foodButton.getId(), dayProgress.getStateByCategory(Progress.Category.Food));
+            buttonID2State.put(sportButton.getId(),  dayProgress.getStateByCategory(Progress.Category.Sport));
 
             foodButton.setOnClickListener(this);
             sportButton.setOnClickListener(this);
