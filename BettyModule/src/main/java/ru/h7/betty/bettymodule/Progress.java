@@ -7,23 +7,6 @@ import android.content.SharedPreferences;
 import java.util.*;
 
 class Progress {
-//    public enum State_ {
-//        Undefined, Bad, Good, Planned;
-//
-//        private static final State_[] values_ = values();
-//        public State_ getNextState() {
-//            return values_[(ordinal() + 1) % values_.length];
-//        }
-////
-////        public boolean isFoodState() {
-////
-////        }
-////
-////        public boolean isSportState() {
-////
-////        }
-//
-//    }
 
     public enum Category { Food, Sport; }
     public enum Estimate { Undefined, Bad, Good, Planned; }
@@ -68,7 +51,6 @@ class Progress {
         }
     }
 
-
     public class DayProgress {
 
         public State food, sport;
@@ -104,15 +86,6 @@ class Progress {
             editor.apply();
         }
         parse(progressStr);
-
-//        if(progressMap.isEmpty()) {
-//            fillRandomData(700);
-//            savePreference();
-
-//            FileOutputStream out = new FileOutputStream(getExternalStorageDirectory() + "/yahoo.png");
-//            outputStreamWriter.write(data);
-//            outputStreamWriter.close();
-//        }
     }
 
     private void fillRandomData(int N) {
