@@ -18,6 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 class Date {
@@ -54,9 +56,7 @@ class Date {
     }
 }
 
-interface ButtonStateUpdater {
-    void update(ImageButton button, Progress.State state);
-}
+
 
 interface ProgressGetter {
     Progress getProgress();
@@ -142,9 +142,11 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements View.OnClickListener {
         private Date date = new Date();
-        private int colors[] = {Color.parseColor("#cccccc"), Color.RED, Color.GREEN, Color.YELLOW};
+//        private int colors[] = {Color.parseColor("#cccccc"), Color.RED, Color.GREEN, Color.YELLOW};
+        private Map<Integer, Progress.State> buttonID2State = new TreeMap<Integer, Progress.State>();
+        ButtonStateUpdater buttonStateUpdater = new BackgroundButtonStateUpdater();
         Progress.DayProgress dayProgress;
         Progress progress;
 
@@ -182,25 +184,15 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
             ImageButton foodButton = (ImageButton) view.findViewById(R.id.foodButton);
             ImageButton sportButton = (ImageButton) view.findViewById(R.id.sportButton);
-            foodButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dayProgress.food.switchToNextEstimate();
-                    ImageButton button = (ImageButton) v;
-                    button.setBackgroundColor(colors[dayProgress.food.getEstimate().ordinal()]);
-                }
-            });
-            sportButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dayProgress.sport.switchToNextEstimate();
-                    ImageButton button = (ImageButton) v;
-                    button.setBackgroundColor(colors[dayProgress.sport.getEstimate().ordinal()]);
-                }
-            });
 
-            foodButton.setBackgroundColor(colors[dayProgress.food.getEstimate().ordinal()]);
-            sportButton.setBackgroundColor(colors[dayProgress.sport.getEstimate().ordinal()]);
+            buttonID2State.put(foodButton.getId(), dayProgress.food);
+            buttonID2State.put(sportButton.getId(), dayProgress.sport);
+
+            foodButton.setOnClickListener(this);
+            sportButton.setOnClickListener(this);
+
+            updateButton(foodButton);
+            updateButton(sportButton);
         }
 
         private void showMessage(String msg) {
@@ -218,6 +210,22 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                 // The activity doesn't implement the interface, throw exception
                 throw new ClassCastException(activity.toString() + " must implement ProgressGetter");
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            switchToNextEstimate((ImageButton) v);
+            updateButton((ImageButton) v);
+
+        }
+
+        private void switchToNextEstimate(ImageButton button) {
+            Progress.State state = buttonID2State.get(button.getId());
+            state.switchToNextEstimate();
+        }
+
+        private void updateButton(ImageButton button) {
+            buttonStateUpdater.update(button, buttonID2State.get(button.getId()));
         }
     }
 
