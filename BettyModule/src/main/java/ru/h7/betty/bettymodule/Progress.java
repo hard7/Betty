@@ -11,7 +11,14 @@ import java.util.*;
 import static android.os.Environment.getExternalStorageDirectory;
 
 class Progress {
-    public enum State {Undefined, Bad, Good, Planned};
+    public enum State {
+        Undefined, Bad, Good, Planned;
+
+        private static final State[] values_ = values();
+        public State getNextState() {
+            return values_[(ordinal() + 1) % values_.length];
+        }
+    };
 
     public class DayProgress {
 
@@ -23,6 +30,14 @@ class Progress {
 
         public DayProgress() {
             this('U', 'U');
+        }
+
+        public void switchToNextFoodState() {
+            food = food.getNextState();
+        }
+
+        public void switchToNextSportState() {
+            sport = sport.getNextState();
         }
 
         public State charToState(char stateChar) {

@@ -183,16 +183,16 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             foodButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dayProgress.switchToNextFoodState();
                     ImageButton button = (ImageButton) v;
-                    dayProgress.food = Progress.State.values()[(dayProgress.food.ordinal() + 1) % 4];
                     button.setBackgroundColor(colors[dayProgress.food.ordinal()]);
                 }
             });
             sportButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    dayProgress.switchToNextSportState();
                     ImageButton button = (ImageButton) v;
-                    dayProgress.sport = Progress.State.values()[(dayProgress.sport.ordinal() + 1) % 4];
                     button.setBackgroundColor(colors[dayProgress.sport.ordinal()]);
                 }
             });
