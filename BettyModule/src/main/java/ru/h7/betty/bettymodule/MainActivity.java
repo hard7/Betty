@@ -61,8 +61,7 @@ interface ProgressGetter {
 }
 
 public class MainActivity extends FragmentActivity implements ProgressGetter {
-//    private DialogFragment foodDialog, sportDialog;
-//    private Date date = new Date();
+    private int PAGE_COUNT = 10;
     private Progress progress;
     ViewPager viewPager;
 
@@ -77,15 +76,15 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         setContentView(R.layout.activity_main);
         progress = new Progress(this);
 
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), PAGE_COUNT);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(mSectionsPagerAdapter);
 //        viewPager.addOnPageChangeListener(new CircularViewPagerHandler(viewPager));
-        viewPager.setCurrentItem(viewPager.getAdapter().getCount() - 1);
+        viewPager.setCurrentItem(PAGE_COUNT - 1);
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        String progressStr = sharedPref.getString("PROGRESS_KEY", "");
-        showMessage("PREF: " + progressStr);
+//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+//        String progressStr = sharedPref.getString("PROGRESS_KEY", "");
+//        showMessage("PREF: " + progressStr);
     }
 
     @Override
@@ -121,18 +120,21 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
     }
 
     static public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private int PAGE_COUNT;
+
+        public SectionsPagerAdapter(FragmentManager fm, int PAGE_COUNT_) {
             super(fm);
+            PAGE_COUNT = PAGE_COUNT_;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return PlaceholderFragment.newInstance(getCount() - position - 1);
+            return PlaceholderFragment.newInstance(PAGE_COUNT - position - 1);
         }
 
         @Override
         public int getCount() {
-            return 10;
+            return PAGE_COUNT;
         }
     }
 
@@ -143,8 +145,6 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         private int colors[] = {Color.parseColor("#cccccc"), Color.RED, Color.GREEN, Color.YELLOW};
         Progress.DayProgress dayProgress;
         Progress progress;
-
-
 
         private static final String ARG_SECTION_NUMBER = "section_number";
         private int offset = 0;
