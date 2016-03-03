@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Picture;
 import android.os.Handler;
+import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -67,6 +68,9 @@ class ChartLoader {
         if(iterateNumber > 40) return;
         Picture picture = webView.capturePicture();
         int width = picture.getWidth();
+
+        System.out.println("--------------------> " + width);
+
         appendOut("[" + Integer.toString(width) + "]");
         if(picture.getWidth() <= 320) {
             final Handler handler = new Handler();
