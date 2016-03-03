@@ -1,7 +1,11 @@
 package ru.h7.betty.bettymodule;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -9,10 +13,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.*;
+import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +26,8 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+
+import static android.os.Environment.getExternalStorageDirectory;
 
 
 class Date {
@@ -67,6 +75,8 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
     private Progress progress;
     ViewPager viewPager;
 
+    ChartLoader chartLoader;
+
     @Override
     public Progress getProgress() {
         return progress;
@@ -87,6 +97,8 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 //        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
 //        String progressStr = sharedPref.getString("PROGRESS_KEY", "");
 //        showMessage("PREF: " + progressStr);
+
+        chartLoader = new ChartLoader((WebView) findViewById(R.id.webView));
     }
 
     @Override
@@ -118,7 +130,62 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             return true;
         }
 
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_some:
+                makeSomeNoise();
+                return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void makeSomeNoise() {
+//        ChartLoader chartLoader = new ChartLoader((WebView) findViewById(R.id.webView));
+        chartLoader.handleBitmapResponse(new ChartLoader.BitmapHandler() {
+            @Override
+            public void handleBitmap(Bitmap bitmap) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Tittle");
+                builder.setPositiveButton(" ", null);
+                final AlertDialog dialog = builder.create();
+
+                final Bitmap bitmap_ = bitmap;
+
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackground(
+                                new BitmapDrawable(getResources(), bitmap_));
+                    }
+                });
+                dialog.show();
+
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(getExternalStorageDirectory() + "/Yeah.png");
+                    if (fos != null) {
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                        fos.close();
+                    }
+                }
+                catch( Exception e ) {
+
+                }
+            }
+        });
+    }
+
+    static private void setupImages(final AlertDialog dialog) {
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundResource(R.mipmap.positive);
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundResource(R.mipmap.negative);
+                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setBackgroundResource(R.mipmap.free_256);
+            }
+        });
     }
 
     static public class SectionsPagerAdapter extends FragmentStatePagerAdapter {

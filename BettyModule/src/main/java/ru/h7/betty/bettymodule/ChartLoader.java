@@ -34,8 +34,13 @@ class ChartLoader {
         appendOut(":");
     }
 
-    public void handleBitmapResponse(String url, BitmapHandler handler) {
+    public void handleBitmapResponse(String url, BitmapHandler handler) {       //FIXME depricated
         webView.loadUrl(url);
+        getScreenshot(handler, 0);
+    }
+
+    public void handleBitmapResponse(BitmapHandler handler) {
+        webView.loadUrl(URL);
         getScreenshot(handler, 0);
     }
 
