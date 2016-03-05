@@ -18,7 +18,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -136,9 +138,32 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             case R.id.action_some:
                 makeSomeNoise();
                 return true;
+            case R.id.action_save_config:
+                saveConfig();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //FIXME find better place
+    private void saveConfig() {
+        try {
+            String path = getExternalStorageDirectory() + "/BettyConfig_0.txt";
+            File myFile = new File(path);
+            myFile.createNewFile();
+            FileOutputStream fOut = new FileOutputStream(myFile);
+            OutputStreamWriter myOutWriter =  new OutputStreamWriter(fOut);
+            myOutWriter.append(progress.toString());
+            myOutWriter.close();
+            fOut.close();
+            Toast.makeText(getBaseContext(),
+                    "Done writing SD " + path,
+                    Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void makeSomeNoise() {
