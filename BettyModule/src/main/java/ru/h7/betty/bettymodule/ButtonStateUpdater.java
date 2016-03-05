@@ -35,6 +35,7 @@ class ImageButtonStateUpdater implements ButtonStateUpdater {
 //        imageButton.setImageBitmap(BitmapFactory.decodeFile(URL));
         imageButton.setImageResource(getResource(state));
         imageButton.setBackground(null);
+        imageButton.setScaleX(1.2f);
     }
 
     //FIXME using map <Category, Estimate, id> for avoid double switch
