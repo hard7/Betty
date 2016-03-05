@@ -213,7 +213,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         private Date date = new Date();
 //        private int colors[] = {Color.parseColor("#cccccc"), Color.RED, Color.GREEN, Color.YELLOW};
         private Map<Integer, Progress.State> buttonID2State = new TreeMap<Integer, Progress.State>();
-        ButtonStateUpdater buttonStateUpdater = new BackgroundButtonStateUpdater();
+        ButtonStateUpdater buttonStateUpdater = new ImageButtonStateUpdater();
         Progress.DayProgress dayProgress;
         Progress progress;
 
