@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,10 +23,7 @@ import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static android.os.Environment.getExternalStorageDirectory;
 
@@ -139,18 +135,31 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                 makeSomeNoise();
                 return true;
             case R.id.action_save_config:
-                saveprogress();
+                saveProgress();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    //FIXME find better place
-    private void saveprogress() {
+    //FIXME find better place +1
+    private void saveProgress() {
         try {
-            String path = getExternalStorageDirectory() + "/BettyConfig_0.txt";
-            File myFile = new File(path);
+            String pathToFolder = getExternalStorageDirectory() + "/BettyProgress/";
+            File folder = new File(pathToFolder);
+            folder.mkdirs();
+
+            File files[] = folder.listFiles();
+            int max_ = 0;
+            for(File file : files) {
+                //FIXME OMG!
+                String filename_ = file.getName();
+                int a = Integer.parseInt(filename_.substring(0, filename_.lastIndexOf(".")));
+                max_ = Math.max(max_, a);
+            }
+
+            String filename = String.format("%04d.txt", ++max_);
+            File myFile = new File(folder, filename);
             myFile.createNewFile();
             FileOutputStream fOut = new FileOutputStream(myFile);
             OutputStreamWriter myOutWriter =  new OutputStreamWriter(fOut);
@@ -158,7 +167,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             myOutWriter.close();
             fOut.close();
             Toast.makeText(getBaseContext(),
-                    "Done writing SD " + path,
+                    "Done writing SD " + filename,
                     Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Toast.makeText(getBaseContext(), e.getMessage(),
