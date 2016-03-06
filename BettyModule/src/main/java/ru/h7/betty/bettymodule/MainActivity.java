@@ -139,7 +139,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                 makeSomeNoise();
                 return true;
             case R.id.action_save_config:
-                saveConfig();
+                saveprogress();
                 return true;
         }
 
@@ -147,7 +147,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
     }
 
     //FIXME find better place
-    private void saveConfig() {
+    private void saveprogress() {
         try {
             String path = getExternalStorageDirectory() + "/BettyConfig_0.txt";
             File myFile = new File(path);
