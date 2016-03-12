@@ -10,6 +10,18 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
+import java.util.Vector;
+
+
+interface ProgressPrimeAccessor {
+    int getCount();
+    int getDay(int index);
+    int getMonth(int index);
+    int getYear(int index);
+    int getFoodEstimate(int index);
+}
+
+
 class ChartLoader {
     static private String URL = "file:///android_asset/calendar.html";
 
@@ -20,15 +32,19 @@ class ChartLoader {
     private final WebView webView;
     private Button button;     //FIXME
 
-    public ChartLoader(WebView webView_) {
-        this(webView_, null);
+    public ChartLoader(WebView webView) {
+        this(webView, null, null);
     }
 
-    public ChartLoader(WebView webView_,  Button button_) { //FIXME button_
+    public ChartLoader(WebView webView, ProgressPrimeAccessor accessor) {
+        this(webView, accessor, null);
+    }
+
+    public ChartLoader(WebView webView_, ProgressPrimeAccessor accessor,  Button button_) { //FIXME button_
         webView = webView_;
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.addJavascriptInterface(new WebAppInterface(), WebAppInterface.NAME);
+        webView.addJavascriptInterface(new WebAppInterface(accessor), WebAppInterface.NAME);
 //        initWebViewClient();
 
         button = button_;       //FIXME
@@ -98,10 +114,40 @@ class ChartLoader {
     static private class WebAppInterface {
         public static String NAME = "Android";
 
+        ProgressPrimeAccessor progressPrimeAccessor;
+
+        WebAppInterface(ProgressPrimeAccessor progressPrimeAccessor_) {
+            progressPrimeAccessor = progressPrimeAccessor;
+        }
+
         @JavascriptInterface
         public int getX() {
-            return 40000;
+            return 4000;
+        }
+
+        @JavascriptInterface
+        int getCount() {
+            return progressPrimeAccessor.getCount();
+        }
+
+        @JavascriptInterface
+        int getDay(int index) {
+            return progressPrimeAccessor.getDay(index);
+        }
+
+        @JavascriptInterface
+        int getMonth(int index) {
+            return progressPrimeAccessor.getMonth(index);
+        }
+
+        @JavascriptInterface
+        int getYear(int index) {
+            return progressPrimeAccessor.getYear(index);
+        }
+
+        @JavascriptInterface
+        int getFoodEstimate(int index) {
+            return progressPrimeAccessor.getFoodEstimate(index);
         }
     }
-
 }

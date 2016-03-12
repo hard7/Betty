@@ -57,6 +57,18 @@ class Date {
         }
     }
 
+    public int getDay() {
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getMonth() {
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public int getYear() {
+        return calendar.get(Calendar.YEAR);
+    }
+
     public void shift(int offsetDays) {
         calendar.add(Calendar.DATE, offsetDays);
     }
@@ -95,8 +107,6 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 //        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
 //        String progressStr = sharedPref.getString("PROGRESS_KEY", "");
 //        showMessage("PREF: " + progressStr);
-
-        chartLoader = new ChartLoader((WebView) findViewById(R.id.webView));
     }
 
     @Override
@@ -176,7 +186,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
     }
 
     private void makeSomeNoise() {
-//        ChartLoader chartLoader = new ChartLoader((WebView) findViewById(R.id.webView));
+        chartLoader = new ChartLoader((WebView) findViewById(R.id.webView), progress.makeProgressPrimeAccessor());
         chartLoader.handleBitmapResponse(new ChartLoader.BitmapHandler() {
             @Override
             public void handleBitmap(Bitmap bitmap) {

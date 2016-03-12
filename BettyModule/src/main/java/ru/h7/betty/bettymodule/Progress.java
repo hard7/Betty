@@ -51,6 +51,50 @@ class Progress {
         }
     }
 
+    ProgressPrimeAccessor makeProgressPrimeAccessor() {
+        final int count = progressMap.size();
+        final Vector<Integer> days = new Vector<Integer>();
+        final Vector<Integer> months = new Vector<Integer>();
+        final Vector<Integer> years = new Vector<Integer>();
+        final Vector<Integer> foodEstimate = new Vector<Integer>();
+        Date date = new Date();
+        for( Map.Entry<String, DayProgress> entry : progressMap.entrySet() ) {
+            date.set(entry.getKey());
+            DayProgress dp = entry.getValue();
+            days.add(date.getDay());
+            months.add(date.getMonth());
+            years.add(date.getYear());
+            foodEstimate.add(dp.food.estimate.ordinal());           //FIXME
+        }
+
+        return new ProgressPrimeAccessor() {
+            @Override
+            public int getCount() {
+                return count;
+            }
+
+            @Override
+            public int getDay(int index) {
+                return days.get(index);
+            }
+
+            @Override
+            public int getMonth(int index) {
+                return months.get(index);
+            }
+
+            @Override
+            public int getYear(int index) {
+                return years.get(index);
+            }
+
+            @Override
+            public int getFoodEstimate(int index) {
+                return foodEstimate.get(index);
+            }
+        };
+    }
+
     public class DayProgress {
 
         private State food, sport;
