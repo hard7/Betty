@@ -32,9 +32,9 @@ class ChartLoader {
     private final WebView webView;
     private Button button;     //FIXME
 
-    public ChartLoader(WebView webView) {
-        this(webView, null, null);
-    }
+//    public ChartLoader(WebView webView) {
+//        this(webView, null, null);
+//    }
 
     public ChartLoader(WebView webView, ProgressPrimeAccessor accessor) {
         this(webView, accessor, null);
@@ -112,12 +112,17 @@ class ChartLoader {
     }
 
     static private class WebAppInterface {
+        private Vector<Integer> days = new Vector<Integer>();
+
         public static String NAME = "Android";
 
         ProgressPrimeAccessor progressPrimeAccessor;
 
         WebAppInterface(ProgressPrimeAccessor progressPrimeAccessor_) {
             progressPrimeAccessor = progressPrimeAccessor;
+            days.add(5);
+            days.add(6);
+            days.add(7);
         }
 
         @JavascriptInterface
@@ -126,27 +131,29 @@ class ChartLoader {
         }
 
         @JavascriptInterface
-        int getCount() {
-            return progressPrimeAccessor.getCount();
+        public int getCount() {
+            return progressPrimeAccessor.getCount();        // FAIL
+//            return 5;                                     // OK
+//            return days.size();                           // OK
         }
 
         @JavascriptInterface
-        int getDay(int index) {
+        public int getDay(int index) {
             return progressPrimeAccessor.getDay(index);
         }
 
         @JavascriptInterface
-        int getMonth(int index) {
+        public int getMonth(int index) {
             return progressPrimeAccessor.getMonth(index);
         }
 
         @JavascriptInterface
-        int getYear(int index) {
+        public int getYear(int index) {
             return progressPrimeAccessor.getYear(index);
         }
 
         @JavascriptInterface
-        int getFoodEstimate(int index) {
+        public int getFoodEstimate(int index) {
             return progressPrimeAccessor.getFoodEstimate(index);
         }
     }
