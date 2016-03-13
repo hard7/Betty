@@ -88,6 +88,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
     ViewPager viewPager;
 
     ChartLoader chartLoader;
+    ProgressTextManager progressTextManager;
 
     @Override
     public Progress getProgress() {
@@ -105,10 +106,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         viewPager.setAdapter(mSectionsPagerAdapter);
 //        viewPager.addOnPageChangeListener(new CircularViewPagerHandler(viewPager));
         viewPager.setCurrentItem(PAGE_COUNT - 1);
-
-//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-//        String progressStr = sharedPref.getString("PROGRESS_KEY", "");
-//        showMessage("PREF: " + progressStr);
+        progressTextManager = new ProgressTextManager(this);
     }
 
     @Override
@@ -147,42 +145,19 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                 makeSomeNoise();
                 return true;
             case R.id.action_save_config:
-                ProgressTextManager.save(progress.toString());
+                progressTextManager.save(progress.toString());
                 return true;
             case R.id.action_load_config:
-                loadProgress();
+                progressTextManager.load(new ProgressTextHandler() {
+                    @Override
+                    public void progressTextHandle(String progressText) {
+                        showMessage("progressText: \n" + progressText);
+                    }
+                });
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void loadProgress() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Title");
-
-// Set up the input
-        final EditText input = new EditText(this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-// Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                m_Text = input.getText().toString();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-
     }
 
     private void makeSomeNoise() {
