@@ -113,7 +113,25 @@ class ChartLoader {
         Canvas canvas = new Canvas(bitmap);
 
         picture.draw(canvas);
+        blueToGreenOnBitmap(bitmap);
         bitmapHandler.handleBitmap(bitmap);
+    }
+
+    private void blueToGreenOnBitmap(Bitmap bitmap) {
+        int blueColor = 0xFF4273E0;
+        int greenColor = 0xFF66F556;
+
+        for(int j=0; j<bitmap.getHeight(); j++) {
+            for(int i=0; i<bitmap.getWidth(); i++) {
+                int color = bitmap.getPixel(i, j);
+                int  red   = (color & 0x00ff0000) >> 16;
+                int  green = (color & 0x0000ff00) >> 8;
+                int  blue  =  color & 0x000000ff;
+                if(blue > 220 && red < 180 && green < 180) {
+                    bitmap.setPixel(i, j, greenColor);
+                }
+            }
+        }
     }
 
     private void appendOut(String msg) {
@@ -141,11 +159,7 @@ class ChartLoader {
 
         @JavascriptInterface
         public int getCount() {
-
-//            return _demoGetInt.get();
             return progressPrimeAccessor.getCount();        // FAIL
-//            return 5;                                     // OK
-//            return days.size();                           // OK
         }
 
         @JavascriptInterface

@@ -66,7 +66,12 @@ class Progress {
             days.add(date.getDay());
             months.add(date.getMonth());
             years.add(date.getYear());
-            foodEstimate.add(dp.food.estimate.ordinal());           //FIXME
+            switch (dp.food.getEstimate()) {
+                case Bad: foodEstimate.add(-3); break;
+                case Planned: foodEstimate.add(-1); break;
+                case Undefined: foodEstimate.add(0); break;
+                case Good: foodEstimate.add(3); break;
+            }
         }
 
         return new ProgressPrimeAccessor() {
