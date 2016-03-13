@@ -53,49 +53,46 @@ class Progress {
     }
 
     ProgressPrimeAccessor makeProgressPrimeAccessor() {
-//        final int count = progressMap.size();
-//        System.out.println(">>>> " + count);
-//        final Vector<Integer> days = new Vector<Integer>();
-//        final Vector<Integer> months = new Vector<Integer>();
-//        final Vector<Integer> years = new Vector<Integer>();
-//        final Vector<Integer> foodEstimate = new Vector<Integer>();
-//        Date date = new Date();
-//        for( Map.Entry<String, DayProgress> entry : progressMap.entrySet() ) {
-//            date.set(entry.getKey());
-//            DayProgress dp = entry.getValue();
-//            days.add(date.getDay());
-//            months.add(date.getMonth());
-//            years.add(date.getYear());
-//            foodEstimate.add(dp.food.estimate.ordinal());           //FIXME
-//        }
+        final int count = progressMap.size();
+        System.out.println(">>>> " + count);
+        final Vector<Integer> days = new Vector<Integer>();
+        final Vector<Integer> months = new Vector<Integer>();
+        final Vector<Integer> years = new Vector<Integer>();
+        final Vector<Integer> foodEstimate = new Vector<Integer>();
+        Date date = new Date();
+        for( Map.Entry<String, DayProgress> entry : progressMap.entrySet() ) {
+            date.set(entry.getKey());
+            DayProgress dp = entry.getValue();
+            days.add(date.getDay());
+            months.add(date.getMonth());
+            years.add(date.getYear());
+            foodEstimate.add(dp.food.estimate.ordinal());           //FIXME
+        }
 
         return new ProgressPrimeAccessor() {
-
-
             @Override
             public int getCount() {
-//                return count;
-                return 7;
+                return count;
             }
 
             @Override
             public int getDay(int index) {
-                return 1; // days.get(index);
+                return days.get(index);
             }
 
             @Override
             public int getMonth(int index) {
-                return 5; // months.get(index);
+                return months.get(index);
             }
 
             @Override
             public int getYear(int index) {
-                return 2015; // years.get(index);
+                return years.get(index);
             }
 
             @Override
             public int getFoodEstimate(int index) {
-                return 10; //foodEstimate.get(index);
+                return foodEstimate.get(index);
             }
         };
     }

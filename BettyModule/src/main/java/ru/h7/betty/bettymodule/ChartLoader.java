@@ -21,6 +21,13 @@ interface ProgressPrimeAccessor {
     int getFoodEstimate(int index);
 }
 
+//class SimpleProgressPrimeAccessor42 implements ProgressPrimeAccessor {
+//    @Override
+//    public int getCount() {
+//        return 42;
+//    }
+//}
+
 
 class ChartLoader {
     static private String URL = "file:///android_asset/calendar.html";
@@ -44,7 +51,9 @@ class ChartLoader {
         webView = webView_;
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.addJavascriptInterface(new WebAppInterface(accessor), WebAppInterface.NAME);
+        WebAppInterface webApp = new WebAppInterface(accessor);
+        webApp.count = 14;
+        webView.addJavascriptInterface(webApp, WebAppInterface.NAME);
 //        initWebViewClient();
 
         button = button_;       //FIXME
@@ -112,14 +121,14 @@ class ChartLoader {
     }
 
     static private class WebAppInterface {
+        public int count = 5;
         private Vector<Integer> days = new Vector<Integer>();
-
         public static String NAME = "Android";
 
         ProgressPrimeAccessor progressPrimeAccessor;
 
         WebAppInterface(ProgressPrimeAccessor progressPrimeAccessor_) {
-            progressPrimeAccessor = progressPrimeAccessor;
+            progressPrimeAccessor = progressPrimeAccessor_;
             days.add(5);
             days.add(6);
             days.add(7);
@@ -132,6 +141,8 @@ class ChartLoader {
 
         @JavascriptInterface
         public int getCount() {
+
+//            return _demoGetInt.get();
             return progressPrimeAccessor.getCount();        // FAIL
 //            return 5;                                     // OK
 //            return days.size();                           // OK
