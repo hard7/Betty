@@ -197,5 +197,4 @@ class Progress {
             progressMap.put(comp[0], new DayProgress(comp[1].charAt(0), comp[1].charAt(1)));
         }
     }
-
 }

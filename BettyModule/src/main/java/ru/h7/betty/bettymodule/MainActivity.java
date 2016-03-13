@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.InputType;
 import android.view.*;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -145,44 +147,42 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                 makeSomeNoise();
                 return true;
             case R.id.action_save_config:
-                saveProgress();
+                ProgressTextManager.save(progress.toString());
+                return true;
+            case R.id.action_load_config:
+                loadProgress();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    //FIXME find better place +1
-    private void saveProgress() {
-        try {
-            String pathToFolder = getExternalStorageDirectory() + "/BettyProgress/";
-            File folder = new File(pathToFolder);
-            folder.mkdirs();
+    private void loadProgress() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Title");
 
-            File files[] = folder.listFiles();
-            int max_ = 0;
-            for(File file : files) {
-                //FIXME OMG!
-                String filename_ = file.getName();
-                int a = Integer.parseInt(filename_.substring(0, filename_.lastIndexOf(".")));
-                max_ = Math.max(max_, a);
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                m_Text = input.getText().toString();
             }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
 
-            String filename = String.format("%04d.txt", ++max_);
-            File myFile = new File(folder, filename);
-            myFile.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(myFile);
-            OutputStreamWriter myOutWriter =  new OutputStreamWriter(fOut);
-            myOutWriter.append(progress.toString());
-            myOutWriter.close();
-            fOut.close();
-            Toast.makeText(getBaseContext(),
-                    "Done writing SD " + filename,
-                    Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Toast.makeText(getBaseContext(), e.getMessage(),
-                    Toast.LENGTH_SHORT).show();
-        }
+        builder.show();
+
     }
 
     private void makeSomeNoise() {
