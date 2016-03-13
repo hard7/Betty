@@ -49,6 +49,7 @@ class ChartLoader {
 
     public ChartLoader(WebView webView_, ProgressPrimeAccessor accessor,  Button button_) { //FIXME button_
         webView = webView_;
+        webView.clearView();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(true);
         WebAppInterface webApp = new WebAppInterface(accessor);
@@ -159,7 +160,7 @@ class ChartLoader {
 
         @JavascriptInterface
         public int getCount() {
-            return progressPrimeAccessor.getCount();        // FAIL
+            return progressPrimeAccessor.getCount();
         }
 
         @JavascriptInterface

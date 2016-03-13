@@ -151,7 +151,8 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                 progressTextManager.load(new ProgressTextHandler() {
                     @Override
                     public void progressTextHandle(String progressText) {
-                        showMessage("progressText: \n" + progressText);
+                        progressTextManager.save(progress.toString());
+                        progress.reinitialize(progressText);
                     }
                 });
                 return true;

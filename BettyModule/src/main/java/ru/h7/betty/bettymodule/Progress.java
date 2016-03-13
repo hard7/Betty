@@ -148,6 +148,11 @@ class Progress {
         parse(progressStr);
     }
 
+    public void reinitialize(String progressText) {
+        parse(progressText);
+        save();
+    }
+
     private void fillRandomData(int N) {
         final Random random = new Random();
         String states = "UGBP";
@@ -190,6 +195,7 @@ class Progress {
     }
 
     private void parse(String str) {
+        progressMap.clear();
         String lines[] = str.split("[\\r?\\n]");
         for(String line : lines) {
             if(line.isEmpty()) continue;
