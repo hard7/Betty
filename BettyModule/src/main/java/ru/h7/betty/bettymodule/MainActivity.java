@@ -161,12 +161,9 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
 
             case R.id.action_unblock:
-//                Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager + ":" + viewPager.getCurrentItem());
                 Fragment page = sectionsPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem());
-                // based on the current position you can then cast the page to the correct
-                // class and call the method:
-//                    ((PlaceholderFragment)page).updateList("new item");
-                showMessage("#" + ((PlaceholderFragment)page).getOffset() + "(" + viewPager.getCurrentItem() + ")");
+                ((PlaceholderFragment)page).unlockButtons();
+                showMessage("Unlocked");
 
                 return true;
         }
@@ -267,6 +264,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         ButtonStateUpdater buttonStateUpdater = new ImageButtonStateUpdater();
         Progress.DayProgress dayProgress;
         Progress progress;
+        ImageButton foodButton, sportButton;
 
         private static final String ARG_SECTION_NUMBER = "section_number";
         private int offset = 0;
@@ -303,8 +301,8 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             TextView dateText = (TextView) view.findViewById(R.id.dateText);
             dateText.setText(date.toString());
 
-            ImageButton foodButton = (ImageButton) view.findViewById(R.id.foodButton);
-            ImageButton sportButton = (ImageButton) view.findViewById(R.id.sportButton);
+            foodButton = (ImageButton) view.findViewById(R.id.foodButton);
+            sportButton = (ImageButton) view.findViewById(R.id.sportButton);
 
             buttonID2State.put(foodButton.getId(), dayProgress.getStateByCategory(Progress.Category.Food));
             buttonID2State.put(sportButton.getId(),  dayProgress.getStateByCategory(Progress.Category.Sport));
@@ -326,6 +324,11 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
         private void showMessage(String msg) {
             Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+
+        public void unlockButtons() {
+            foodButton.setEnabled(true);
+            sportButton.setEnabled(true);
         }
 
         @Override
