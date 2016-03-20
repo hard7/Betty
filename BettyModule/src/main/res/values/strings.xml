@@ -6,4 +6,5 @@
     <string name="action_some">Показать прогресс</string>
     <string name="action_save_progress">Сохранить прогресс</string>
     <string name="action_load_progress">Загрузить прогресс</string>
+    <string name="action_unblock">Разблокировать</string>
 </resources>

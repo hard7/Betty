@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.InputType;
+import android.util.SparseArray;
 import android.view.*;
 import android.webkit.WebView;
 import android.widget.EditText;
@@ -89,6 +90,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
     ChartLoader chartLoader;
     ProgressTextManager progressTextManager;
+    SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
     public Progress getProgress() {
@@ -101,9 +103,9 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         setContentView(R.layout.activity_main);
         progress = new Progress(this);
 
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), PAGE_COUNT);
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), PAGE_COUNT);
         viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager.setAdapter(sectionsPagerAdapter);
 //        viewPager.addOnPageChangeListener(new CircularViewPagerHandler(viewPager));
         viewPager.setCurrentItem(PAGE_COUNT - 1);
         progressTextManager = new ProgressTextManager(this);
@@ -155,6 +157,17 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
                         progress.reinitialize(progressText);
                     }
                 });
+                return true;
+
+
+            case R.id.action_unblock:
+//                Fragment page = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.pager + ":" + viewPager.getCurrentItem());
+                Fragment page = sectionsPagerAdapter.getRegisteredFragment(viewPager.getCurrentItem());
+                // based on the current position you can then cast the page to the correct
+                // class and call the method:
+//                    ((PlaceholderFragment)page).updateList("new item");
+                showMessage("#" + ((PlaceholderFragment)page).getOffset() + "(" + viewPager.getCurrentItem() + ")");
+
                 return true;
         }
 
@@ -209,6 +222,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
     }
 
     static public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+        SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
         private int PAGE_COUNT;
 
         public SectionsPagerAdapter(FragmentManager fm, int PAGE_COUNT_) {
@@ -224,6 +238,23 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         @Override
         public int getCount() {
             return PAGE_COUNT;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            registeredFragments.put(position, fragment);
+            return fragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            registeredFragments.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        public Fragment getRegisteredFragment(int position) {
+            return registeredFragments.get(position);
         }
     }
 
@@ -252,6 +283,8 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             return fragment;
         }
 
+        public int getOffset() {return offset;}
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -263,6 +296,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
         public void onViewCreated(View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
             int offset = getArguments().getInt(ARG_SECTION_NUMBER);
+            this.offset = offset;
             date.shift(-offset);
 
             dayProgress = progress.getDayProgress(date.toString());
@@ -280,6 +314,14 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
             updateButton(foodButton);
             updateButton(sportButton);
+
+            if(offset >= 2 || buttonID2State.get(foodButton.getId()).getEstimate() != Progress.Estimate.Undefined) {
+                foodButton.setEnabled(false);
+            }
+
+            if(offset >= 2 || buttonID2State.get(sportButton.getId()).getEstimate() != Progress.Estimate.Undefined) {
+                sportButton.setEnabled(false);
+            }
         }
 
         private void showMessage(String msg) {
@@ -315,5 +357,4 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
             buttonStateUpdater.update(button, buttonID2State.get(button.getId()));
         }
     }
-
 }
