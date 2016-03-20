@@ -198,7 +198,7 @@ class Progress {
         progressMap.clear();
         String lines[] = str.split("[\\r?\\n]");
         for(String line : lines) {
-            if(line.isEmpty()) continue;
+            if(line.trim().length() == 0) continue;
             String comp[] = line.split("\\s+", 2);
             progressMap.put(comp[0], new DayProgress(comp[1].charAt(0), comp[1].charAt(1)));
         }

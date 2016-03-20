@@ -184,7 +184,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
                 FileOutputStream fos = null;
                 try {
-                    fos = new FileOutputStream(getExternalStorageDirectory() + "/Yeah.png");
+                    fos = new FileOutputStream(getExternalStorageDirectory() + "/BettyProgress/Yeah.png");
                     if (fos != null) {
                         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
                         fos.close();
