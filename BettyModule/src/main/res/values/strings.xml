@@ -2,8 +2,8 @@
     <string name="app_name">Betty</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_some">Some</string>
+    <string name="action_settings">Просто</string>
+    <string name="action_some">Показать прогресс</string>
     <string name="action_save_progress">Сохранить прогресс</string>
     <string name="action_load_progress">Загрузить прогресс</string>
 </resources>
