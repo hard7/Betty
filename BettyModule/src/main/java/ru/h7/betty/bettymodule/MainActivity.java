@@ -33,13 +33,18 @@ import static android.os.Environment.getExternalStorageDirectory;
 
 class Date {
     static public String DATE_FORMAT = "yyyy.MM.dd";
-//    static public String DATE_FORMAT_OUTPUT = "dd.MM.yyyy";
+    static public String DATE_FORMAT_OUTPUT = "EEEE, dd MMMM yyyy";
     private Calendar calendar = Calendar.getInstance();
     private DateFormat date_fmt = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+    private DateFormat date_fmt_out = new SimpleDateFormat(DATE_FORMAT_OUTPUT, Locale.US);
 
     @Override
     public final String toString() {
         return date_fmt.format(calendar.getTime());
+    }
+
+    public final String toStringOut() {
+        return date_fmt_out.format(calendar.getTime());
     }
 
     public void next() {
@@ -299,7 +304,7 @@ public class MainActivity extends FragmentActivity implements ProgressGetter {
 
             dayProgress = progress.getDayProgress(date.toString());
             TextView dateText = (TextView) view.findViewById(R.id.dateText);
-            dateText.setText(date.toString());
+            dateText.setText(date.toStringOut());
 
             foodButton = (ImageButton) view.findViewById(R.id.foodButton);
             sportButton = (ImageButton) view.findViewById(R.id.sportButton);
