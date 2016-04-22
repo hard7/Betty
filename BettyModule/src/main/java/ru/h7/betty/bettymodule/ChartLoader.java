@@ -19,6 +19,7 @@ interface ProgressPrimeAccessor {
     int getMonth(int index);
     int getYear(int index);
     int getFoodEstimate(int index);
+    int getSportEstimate(int index);
 }
 
 //class SimpleProgressPrimeAccessor42 implements ProgressPrimeAccessor {
@@ -181,6 +182,11 @@ class ChartLoader {
         @JavascriptInterface
         public int getFoodEstimate(int index) {
             return progressPrimeAccessor.getFoodEstimate(index);
+        }
+
+        @JavascriptInterface
+        public int getSportEstimate(int index) {
+            return progressPrimeAccessor.getSportEstimate(index);
         }
     }
 }

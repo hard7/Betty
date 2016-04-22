@@ -13,27 +13,34 @@
     google.setOnLoadCallback(drawChart);
 
    function drawChart() {
-       var dataTable = new google.visualization.DataTable();
-       dataTable.addColumn({ type: 'date', id: 'Date' });
-       dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+       var dataTableFood = new google.visualization.DataTable();
+       dataTableFood.addColumn({ type: 'date', id: 'Date' });
+       dataTableFood.addColumn({ type: 'number', id: 'Won/Loss' });
+
+       var dataTableSport = new google.visualization.DataTable();
+       dataTableSport.addColumn({ type: 'date', id: 'Date' });
+       dataTableSport.addColumn({ type: 'number', id: 'Won/Loss' });
 
         for(var i=0; i<Android.getCount(); i++) {
             var date = new Date(Android.getYear(i), Android.getMonth(i), Android.getDay(i));
-            dataTable.addRow( [ date, Android.getFoodEstimate(i) ] );
+            dataTableFood.addRow( [ date, Android.getFoodEstimate(i) ] );
+            dataTableSport.addRow( [ date, Android.getSportEstimate(i) ] );
         }
 
-       var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+       var chartFood = new google.visualization.Calendar(document.getElementById('calendar_food'));
+       var chartSport = new google.visualization.Calendar(document.getElementById('calendar_sport'));
 
-       var options = {
-         title: "Календарик",
-         height: 350,
-       };
+       var optionsFood = { title: "Питание", height: 250 };
+       var optionsSport = { title: "Спорт", height: 250 };
 
-       chart.draw(dataTable, options);
+       chartFood.draw(dataTableFood, optionsFood);
+       chartSport.draw(dataTableSport, optionsSport);
    }
     </script>
 </head>
 <body>
-<div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
+<div id="calendar_food" style="width: 1000px; height: 200px;" ></div>
+<div id="calendar_sport" style="width: 1000px; height: 200px;" ></div>
+<!--<div id="calendar_basic_2" style="width: 1000px; height: 350px;"></div>-->
 </body>
 </html>

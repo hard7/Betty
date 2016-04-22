@@ -59,6 +59,7 @@ class Progress {
         final Vector<Integer> months = new Vector<Integer>();
         final Vector<Integer> years = new Vector<Integer>();
         final Vector<Integer> foodEstimate = new Vector<Integer>();
+        final Vector<Integer> sportEstimate = new Vector<Integer>();
         Date date = new Date();
         for( Map.Entry<String, DayProgress> entry : progressMap.entrySet() ) {
             date.set(entry.getKey());
@@ -71,6 +72,13 @@ class Progress {
                 case Planned: foodEstimate.add(-1); break;
                 case Undefined: foodEstimate.add(0); break;
                 case Good: foodEstimate.add(3); break;
+            }
+
+            switch (dp.sport.getEstimate()) {
+                case Bad: sportEstimate.add(-3); break;
+                case Planned: sportEstimate.add(-1); break;
+                case Undefined: sportEstimate.add(0); break;
+                case Good: sportEstimate.add(3); break;
             }
         }
 
@@ -98,6 +106,11 @@ class Progress {
             @Override
             public int getFoodEstimate(int index) {
                 return foodEstimate.get(index);
+            }
+
+            @Override
+            public int getSportEstimate(int index) {
+                return sportEstimate.get(index);
             }
         };
     }
